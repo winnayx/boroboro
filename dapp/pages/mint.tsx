@@ -9,9 +9,11 @@ import { DropzoneArea } from "material-ui-dropzone";
 import Web3 from "web3";
 import { useEffect, useState } from "react";
 import { styled } from "@material-ui/core/styles";
-
+import { AbiItem } from "web3-utils";
 import DropIcon from "../src/features/dropzone/dropIcon.svg";
 import ContentWrapper from "../src/features/contentWrapper";
+
+import { ARTWORK_ADDRESS, ARTWORK_ABI } from "../contractConfig";
 
 declare let window: any;
 const initialState = {
@@ -36,12 +38,16 @@ const StyledDropzoneArea = styled(DropzoneArea)({});
 export default function MintPage() {
   const [artwork, setArtwork] = useState(initialState);
   const [account, setAccount] = useState("");
+  const [contract, setContract] = useState({});
 
   useEffect(() => {
     const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
     web3.eth.requestAccounts().then((accts) => setAccount(accts[0]));
-    // const islandContract = new web3.eth.Contract(ISLAND_ABI, ISLAND_ADDRESS);
-    // setContract(islandContract);
+    const contractInstance = new web3.eth.Contract(
+      ARTWORK_ABI as AbiItem[],
+      ARTWORK_ADDRESS
+    );
+    setContract(contractInstance);
   }, []);
 
   useEffect(() => {
