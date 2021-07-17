@@ -6,12 +6,14 @@ import {
   TextField,
 } from "@material-ui/core";
 import { DropzoneArea } from "material-ui-dropzone";
-import DropIcon from "../src/features/dropzone/dropIcon.svg";
-
-import ContentWrapper from "../src/features/contentWrapper";
+import Web3 from "web3";
+import { useEffect, useState } from "react";
 import { styled } from "@material-ui/core/styles";
-import { useState, useEffect } from "react";
 
+import DropIcon from "../src/features/dropzone/dropIcon.svg";
+import ContentWrapper from "../src/features/contentWrapper";
+
+declare let window: any;
 const initialState = {
   title: "",
   description: "",
@@ -33,6 +35,27 @@ const StyledDropzoneArea = styled(DropzoneArea)({});
 
 export default function MintPage() {
   const [artwork, setArtwork] = useState(initialState);
+  const [account, setAccount] = useState("");
+
+  useEffect(() => {
+    const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+    web3.eth.requestAccounts().then((accts) => setAccount(accts[0]));
+    // const islandContract = new web3.eth.Contract(ISLAND_ABI, ISLAND_ADDRESS);
+    // setContract(islandContract);
+  }, []);
+
+  useEffect(() => {
+    function detectAccountChange() {
+      if (window.ethereum) {
+        window.ethereum.on("accountsChanged", (accts: any) => {
+          const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+          web3.eth.requestAccounts().then((accounts) => setAccount(accts[0]));
+        });
+      }
+    }
+    detectAccountChange();
+  });
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
     console.log(artwork);
