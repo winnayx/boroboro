@@ -8,6 +8,9 @@ export default function Home() {
         <meta name="description" content="CS191 Project" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div>
+      <h1>Hello World</h1>
+      </div>
     </div>
   );
 }

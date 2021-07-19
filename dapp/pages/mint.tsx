@@ -8,7 +8,7 @@ import {
 import { DropzoneArea } from "material-ui-dropzone";
 import Web3 from "web3";
 import { useEffect, useState } from "react";
-import { styled } from "@material-ui/core/styles";
+import { styled, makeStyles } from "@material-ui/core/styles";
 import { AbiItem } from "web3-utils";
 import DropIcon from "../src/features/dropzone/dropIcon.svg";
 import ContentWrapper from "../src/features/contentWrapper";
@@ -18,6 +18,7 @@ import { ARTWORK_ADDRESS, ARTWORK_ABI } from "../contractConfig";
 declare let window: any;
 const initialState = {
   title: "",
+  artist: "",
   description: "",
   year: "",
   files: [],
@@ -28,18 +29,30 @@ const required = (value: string) =>
 
 const minting = false;
 
-const Section = styled(Box)({});
-const StyledTextField = styled(TextField)({
-  margin: "0 0 20px 0",
-  width: "100%",
+const Section = styled(Box)({
+  margin: "20px 0",
 });
+
 const StyledDropzoneArea = styled(DropzoneArea)({});
+
+const useStyles = makeStyles({
+  root: {
+    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    borderRadius: 3,
+    border: 0,
+    color: "white",
+    height: 48,
+    padding: "0 30px",
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    margin: "15px 0",
+  },
+});
 
 export default function MintPage() {
   const [artwork, setArtwork] = useState(initialState);
   const [account, setAccount] = useState("");
   const [contract, setContract] = useState({});
-
+  const classes = useStyles();
   useEffect(() => {
     const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
     web3.eth.requestAccounts().then((accts) => setAccount(accts[0]));
@@ -48,6 +61,7 @@ export default function MintPage() {
       ARTWORK_ADDRESS
     );
     setContract(contractInstance);
+    console.log("contract:", contractInstance);
   }, []);
 
   useEffect(() => {
@@ -76,6 +90,11 @@ export default function MintPage() {
           title: event.target.value,
         });
         break;
+      case "artist":
+        setArtwork({
+          ...artwork,
+          artist: event.target.value,
+        });
       case "description":
         setArtwork({
           ...artwork,
@@ -106,7 +125,7 @@ export default function MintPage() {
       <form noValidate onSubmit={handleSubmit}>
         <Section>
           <Typography variant="h2" gutterBottom>
-            Create new Item
+            Add New Artwork
           </Typography>
         </Section>
         <Section>
@@ -114,23 +133,37 @@ export default function MintPage() {
         </Section>
 
         <Section>
-          <StyledTextField
+          <TextField
             id="title"
             label="Artwork Title"
             required
+            fullWidth
+            margin="normal"
             onChange={handleChange}
           />
-          <StyledTextField
-            id="description"
-            label="Artwork Description"
-            multiline
-            rows={4}
+          <TextField
+            id="artist"
+            label="Artist"
+            required
+            fullWidth
+            margin="normal"
             onChange={handleChange}
           />
-          <StyledTextField
+          <TextField
             id="year"
             label="Creation Year"
+            fullWidth
+            margin="normal"
             required
+            onChange={handleChange}
+          />
+          <TextField
+            id="description"
+            label="Artwork Description"
+            fullWidth
+            margin="normal"
+            multiline
+            rows={4}
             onChange={handleChange}
           />
         </Section>
@@ -140,21 +173,30 @@ export default function MintPage() {
           </Typography>
         </Section>
         <Section>
-          <StyledTextField
+          <TextField
             id="publisher"
             label="Publisher"
+            fullWidth
+            margin="normal"
             required
             onChange={handleChange}
           />
-          <StyledTextField
+          <TextField
             id="creator"
             label="Creator"
+            fullWidth
+            margin="normal"
             required
             onChange={handleChange}
           />
         </Section>
 
-        <Button type="submit" variant="contained" color="primary">
+        {/* <Button type="submit" variant="contained" color="primary"> */}
+        <Button
+          classes={{
+            root: classes.root, // class name, e.g. `classes-nesting-root-x`
+          }}
+        >
           Mint Artwork
         </Button>
       </form>
