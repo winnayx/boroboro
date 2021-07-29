@@ -12,7 +12,7 @@ import { styled, makeStyles } from "@material-ui/core/styles";
 import { AbiItem } from "web3-utils";
 import DropIcon from "../src/features/dropzone/dropIcon.svg";
 import ContentWrapper from "../src/features/contentWrapper";
-
+import { uploadFileToIPFS, uploadMetadata } from "../src/api/ipfs";
 import { ARTWORK_ADDRESS, ARTWORK_ABI } from "../contractConfig";
 
 declare let window: any;
@@ -61,7 +61,6 @@ export default function MintPage() {
       ARTWORK_ADDRESS
     );
     setContract(contractInstance);
-    console.log("contract:", contractInstance);
   }, []);
 
   useEffect(() => {
@@ -76,9 +75,32 @@ export default function MintPage() {
     detectAccountChange();
   });
 
+  const constructMetadata = (artwork: any, fullPath: string) => {
+    const { title, artist, description, year } = artwork;
+    return {
+      title: title,
+      artist: artist,
+      description: description,
+      year: year,
+      fileUrl: fullPath,
+    };
+  };
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
     console.log(artwork);
+    console.log("contract", contract.methods);
+    // use web3.js to call mint function to mint the artwork!
+    // what does minting an artwork mean? however?
+
+    uploadFileToIPFS(artwork.files[0])
+      .then(({ fullPath, path }) => {
+        const metadata = constructMetadata(artwork, fullPath);
+        uploadMetadata(metadata)
+          .then((res) => console.log(res))
+          .catch((error) => console.log(error));
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleChange = (event: any) => {
@@ -193,6 +215,7 @@ export default function MintPage() {
 
         {/* <Button type="submit" variant="contained" color="primary"> */}
         <Button
+          type="submit"
           classes={{
             root: classes.root, // class name, e.g. `classes-nesting-root-x`
           }}

@@ -2,6 +2,21 @@
 
 <img src="https://d1ee3oaj5b5ueh.cloudfront.net/thumbs/1440xAUTO_2019_06_5d0cb0e592e84.jpeg" width="1000">
 
+## Roadmap
+
+Frontend
+
+- [ ] /mint for creating a artwork token on the blockchain
+- [ ] / for landing page that displays the artwork
+- [ ] menu bar for connecting to metamask
+
+Backend
+
+- [ ] Make sure user is on the Rinkeby test network
+- [ ] Simple ERC721 contract
+
+
+
 ## Description of the dapp
 
 A artwork transaction history platform on Ethereum.
@@ -126,17 +141,12 @@ Nowadays, the middle men charges excessive amount for just providing a minimum s
 - Drizzle
 - React
 - Promise framework
+- OpenZeppelin
 
 ### With inspiration from:
 
-1. antd: https://ant.design/
+1. MaterialUI: https://ant.design/
    - Input, Radio, Card, Col, Row, Layout, Alert, message, Button, Menu, Icon, Search
-2. Toggle: https://developer.microsoft.com/en-us/fabric
-3. DatePicker: https://www.npmjs.com/package/react-datepicker
-4. moment: https://momentjs.com/
-5. Input, Radio from antd
-6. AccountData, ContractData, ContractForm: https://github.com/trufflesuite/drizzle-react-components
-7. drizzleConnect: https://github.com/trufflesuite/drizzle-react
 8. React, Component: https://reactjs.org/
 9. PropTypes: https://www.npmjs.com/package/prop-types
 10. \_: http://underscorejs.org/

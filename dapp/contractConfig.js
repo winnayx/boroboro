@@ -1,4 +1,4 @@
-export const ARTWORK_ADDRESS = "0xE1c3e020077135766e42dFA15836b9985bbb4F6c";
+export const ARTWORK_ADDRESS = "0xEff3E83ED4eD92D854A4f094A372ac7307013B23";
 export const ARTWORK_ABI = [
   {
     inputs: [],
