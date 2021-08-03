@@ -1,23 +1,27 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract Artwork is ERC721 {
-    constructor() ERC721("Artwork", "AWK") {
+contract Artwork is ERC721URIStorage {
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+
+    constructor() ERC721("Artwork", "ART") {
+        // _setBaseURI("ipfs://");
     }
 
-    /**
-    * @dev Mints a new NFT.
-    * @param _to The address that will own the minted NFT.
-    * @param _tokenId of the NFT to be minted by the msg.sender.
-    */
-    function mint(
-      address _to,
-      uint256 _tokenId
-    )
-      external
+    function mintToken(address owner, string memory metadataURI)
+    public
+    returns (uint256)
     {
-      _safeMint(_to, _tokenId);
+        _tokenIds.increment();
+
+        uint256 id = _tokenIds.current();
+        _safeMint(owner, id);
+        _setTokenURI(id, metadataURI);
+
+        return id;
     }
 }

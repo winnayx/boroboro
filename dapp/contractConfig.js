@@ -1,4 +1,4 @@
-export const ARTWORK_ADDRESS = "0xEff3E83ED4eD92D854A4f094A372ac7307013B23";
+export const ARTWORK_ADDRESS = "0x52B71e432af3A743063594D9534f1d2777658eB9";
 export const ARTWORK_ABI = [
   {
     inputs: [],
@@ -116,7 +116,6 @@ export const ARTWORK_ABI = [
     ],
     stateMutability: "view",
     type: "function",
-    constant: true,
   },
   {
     inputs: [
@@ -136,7 +135,6 @@ export const ARTWORK_ABI = [
     ],
     stateMutability: "view",
     type: "function",
-    constant: true,
   },
   {
     inputs: [
@@ -161,7 +159,30 @@ export const ARTWORK_ABI = [
     ],
     stateMutability: "view",
     type: "function",
-    constant: true,
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "metadataURI",
+        type: "string",
+      },
+    ],
+    name: "mintToken",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [],
@@ -175,7 +196,6 @@ export const ARTWORK_ABI = [
     ],
     stateMutability: "view",
     type: "function",
-    constant: true,
   },
   {
     inputs: [
@@ -195,7 +215,6 @@ export const ARTWORK_ABI = [
     ],
     stateMutability: "view",
     type: "function",
-    constant: true,
   },
   {
     inputs: [
@@ -284,7 +303,6 @@ export const ARTWORK_ABI = [
     ],
     stateMutability: "view",
     type: "function",
-    constant: true,
   },
   {
     inputs: [],
@@ -298,7 +316,6 @@ export const ARTWORK_ABI = [
     ],
     stateMutability: "view",
     type: "function",
-    constant: true,
   },
   {
     inputs: [
@@ -318,7 +335,6 @@ export const ARTWORK_ABI = [
     ],
     stateMutability: "view",
     type: "function",
-    constant: true,
   },
   {
     inputs: [
@@ -339,24 +355,6 @@ export const ARTWORK_ABI = [
       },
     ],
     name: "transferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "mint",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

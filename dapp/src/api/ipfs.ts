@@ -1,5 +1,6 @@
 import { create } from "ipfs-http-client";
-import { MintingPayload } from "./mintingPayload";
+import { MetadataSchema } from "./schemas";
+
 export const host = "ipfs.infura.io";
 export const client = create({
   host,
@@ -34,7 +35,7 @@ export const uploadFileToIPFS = async (
   return uploadToIPFS(buffer);
 };
 
-export const uploadMetadata: (metadata: MintingPayload) => Promise<{
+export const uploadMetadata: (metadata: MetadataSchema) => Promise<{
   fullPath: string;
   path: string;
 }> = async (metadata) => {
