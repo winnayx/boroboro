@@ -1,26 +1,20 @@
-import {
-  Button,
-  Box,
-  Typography,
-  TextField,
-  FormControl,
-} from "@material-ui/core";
+import { Button, Box, Typography, TextField } from "@material-ui/core";
 import { DropzoneArea } from "material-ui-dropzone";
 import Web3 from "web3";
 import { useEffect, useState } from "react";
 import { styled, makeStyles } from "@material-ui/core/styles";
-import { AbiItem } from "web3-utils";
+import type { AbiItem } from "web3-utils";
 import ContentWrapper from "../src/features/contentWrapper";
 import { uploadFileToIPFS, uploadMetadata } from "../src/api/ipfs";
 import { ARTWORK_ADDRESS, ARTWORK_ABI } from "../contractConfig";
 import {
-  MetadataSchema,
+  ArtworkErrorSchema,
   ArtworkSchema,
   constructMetadata,
 } from "../src/api/schemas";
 
 declare let window: any;
-const initialState = {
+const initialArtworkState = {
   title: "",
   artist: "",
   description: "",
@@ -64,13 +58,32 @@ const useStyles = makeStyles({
   },
 });
 
+const validateForm = (
+  artwork: ArtworkSchema
+): { error: boolean; errorState: ArtworkErrorSchema } => {
+  let errorState = {};
+  let error = false;
+  Object.keys(artwork).forEach((field) => {
+    if (
+      field !== "description" &&
+      (!artwork[field] || artwork[field].length === 0)
+    ) {
+      errorState[field] = true;
+      error = true;
+    } else {
+      errorState[field] = false;
+    }
+  });
+  return { error, errorState };
+};
+
 export default function MintPage() {
-  const [artwork, setArtwork] = useState<ArtworkSchema>(initialState);
+  const [artwork, setArtwork] = useState<ArtworkSchema>(initialArtworkState);
   const [account, setAccount] = useState<string>("");
-  const [textFieldError, setTextFieldError] = useState(
+  const [textFieldError, setTextFieldError] = useState<ArtworkErrorSchema>(
     initialTextFieldErrorState
   );
-  const [contract, setContract] = useState({});
+  const [contract, setContract] = useState<any>({});
   const classes = useStyles();
   useEffect(() => {
     const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
@@ -94,22 +107,15 @@ export default function MintPage() {
     detectAccountChange();
   });
 
-  const validateForm = () => {
-    // Object.keys(artwork).forEach((field: any) => {
-    //   if (!artwork[field]) {
-    //     setTextFieldError({
-    //       ...textFieldError,
-    //       ${field}`: true,
-    //     });
-    //   } else {
-    //     textFieldError[field] = false;
-    //   }
-    // });
-  };
-
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     console.log(artwork);
+    const { error, errorState } = validateForm(artwork);
+    setTextFieldError(errorState);
+
+    if (error) {
+      return;
+    }
 
     try {
       const { fullPath } = await uploadFileToIPFS(artwork.files[0]);
@@ -121,10 +127,10 @@ export default function MintPage() {
       contract.methods
         .mintToken("0x3b634Db3a35da1488AEafB18F1be9108D8408e2C", metadataURI)
         .send({ from: "0x3b634Db3a35da1488AEafB18F1be9108D8408e2C" })
-        .on("transactionHash", function (hash) {
+        .on("transactionHash", (hash: string) => {
           console.log(hash);
         })
-        .on("error", function (error, receipt) {
+        .on("error", (error: string) => {
           console.log(error);
         });
     } catch (e) {
@@ -146,6 +152,7 @@ export default function MintPage() {
           ...artwork,
           artist: event.target.value,
         });
+        break;
       case "description":
         setArtwork({
           ...artwork,
@@ -156,6 +163,18 @@ export default function MintPage() {
         setArtwork({
           ...artwork,
           year: event.target.value,
+        });
+        break;
+      case "creator":
+        setArtwork({
+          ...artwork,
+          creator: event.target.value,
+        });
+        break;
+      case "owner":
+        setArtwork({
+          ...artwork,
+          owner: event.target.value,
         });
         break;
       default:
@@ -181,52 +200,52 @@ export default function MintPage() {
         </Section>
         <Section>
           <StyledDropzoneArea onChange={handleFileUpload} />
+          {textFieldError.files && (
+            <Typography color="error" variant="overline">
+              Required Field
+            </Typography>
+          )}
         </Section>
 
         <Section>
           <TextField
             id="title"
             label="Artwork Title"
-            variant="outlined"
             required
             fullWidth
             margin="normal"
             onChange={handleChange}
-            error={artwork.title === ""}
-            helperText={artwork.title ? "Required field" : ""}
+            error={textFieldError.title}
+            helperText={textFieldError.title ? "Required field" : ""}
           />
           <TextField
             id="artist"
             label="Artist"
             required
             fullWidth
-            variant="outlined"
             margin="normal"
             onChange={handleChange}
-            error={artwork.artist === ""}
-            helperText={artwork.artist ? "Required field" : ""}
+            error={textFieldError.artist}
+            helperText={textFieldError.artist ? "Required field" : ""}
           />
           <TextField
             id="year"
             label="Creation Year"
             fullWidth
-            variant="outlined"
             margin="normal"
             required
-            error={artwork.year === ""}
-            helperText={artwork.year ? "Required field" : ""}
+            onChange={handleChange}
+            error={textFieldError.year}
+            helperText={textFieldError.year ? "Required field" : ""}
           />
           <TextField
             id="description"
             label="Artwork Description"
             fullWidth
-            variant="outlined"
             margin="normal"
             multiline
             rows={4}
             onChange={handleChange}
-            error={artwork.description === ""}
-            helperText={artwork.description ? "Required field" : ""}
           />
         </Section>
         <Section>
@@ -237,25 +256,23 @@ export default function MintPage() {
         <Section>
           <TextField
             id="creator"
-            label="Creator of Artwork"
+            label="Wallet Address of Artwork Creator"
             fullWidth
-            variant="outlined"
             margin="normal"
             required
             onChange={handleChange}
-            error={artwork.creator}
-            helperText={artwork.creator ? "Required field" : ""}
+            error={textFieldError.creator}
+            helperText={textFieldError.creator ? "Required field" : ""}
           />
           <TextField
             id="owner"
-            label="Owner of Token"
+            label="Wallet Address of Artwork Owner (could be same as above)"
             fullWidth
-            variant="outlined"
             margin="normal"
             required
             onChange={handleChange}
-            error={artwork.owner}
-            helperText={artwork.owner ? "Required field" : ""}
+            error={textFieldError.owner}
+            helperText={textFieldError.owner ? "Required field" : ""}
           />
         </Section>
 

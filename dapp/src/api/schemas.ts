@@ -21,6 +21,16 @@ export type ArtworkSchema = {
   owner: string;
 };
 
+export type ArtworkErrorSchema = {
+  title: boolean;
+  artist: boolean;
+  description: boolean;
+  year: boolean;
+  files: boolean;
+  creator: boolean;
+  owner: boolean;
+};
+
 export const constructMetadata = (
   artwork: any,
   fullPath: string
