@@ -1,7 +1,7 @@
 export type MetadataSchema = {
   title: string;
   artist: string;
-  description: string;
+  description?: string;
   year: string;
   fileUrl: string;
 
@@ -29,6 +29,11 @@ export type ArtworkErrorSchema = {
   files: boolean;
   creator: boolean;
   owner: boolean;
+};
+
+export type ArtworkCardProps = {
+  tokenId: number;
+  metadata: MetadataSchema;
 };
 
 export const constructMetadata = (

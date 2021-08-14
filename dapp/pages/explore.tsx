@@ -4,13 +4,14 @@ import { Button, Box, Typography, TextField } from "@material-ui/core";
 import { styled, makeStyles } from "@material-ui/core/styles";
 import ContentWrapper from "../src/features/contentWrapper";
 import Section from "../src/features/section";
-import { ArtworkCard } from "../src/features/ArtworkCard";
+import ArtworkCard from "../src/features/ArtworkCard";
 import { getWeb3, detectAccountChange } from "../src/api/web3";
-
+import { MetadataSchema } from "../src/api/schemas";
+import { SettingsSystemDaydreamTwoTone } from "@material-ui/icons";
 declare let window: any;
 
 export default function ExplorePage() {
-  const [tokens, setTokens] = useState<any[]>([]);
+  const [metadatas, setMetadatas] = useState<MetadataSchema[]>([]);
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState<string>("");
   if (typeof window !== "undefined") {
@@ -22,6 +23,7 @@ export default function ExplorePage() {
 
   useEffect(() => {
     getWeb3().then(({ accts, contractInstance }) => {
+      setAccount(accts[0]);
       console.log(contractInstance);
       contractInstance.methods.totalSupply().call(
         {
@@ -36,25 +38,25 @@ export default function ExplorePage() {
               return contractInstance.methods
                 .tokenURI(i + 1) // tokenID begins at 1
                 .call({
-                  from: "0x3b634db3a35da1488aeafb18f1be9108d8408e2c",
+                  from: account,
                 })
                 .then((url: string) => {
-                  return fetch(url).then((data) => {
-                    // console.log(data.json());
-                    return data;
-                  });
+                  return fetch(url, { redirect: "follow" }).then((data) =>
+                    data.json()
+                  );
                 });
             });
 
-            Promise.all(newTokens).then(function (results) {
-              setTokens(results);
-              console.log(tokens);
-            });
+            Promise.all(newTokens).then((results) => setMetadatas(results));
           }
         }
       );
     });
   }, []);
+
+  useEffect(() => {
+    console.log(metadatas);
+  }, [metadatas]);
 
   return (
     <ContentWrapper>
@@ -62,15 +64,16 @@ export default function ExplorePage() {
         Explore
       </Typography>
       <Section>
-        {tokens.map((url, i) => (
-          <Link href={`/artwork/${i}`} passHref key={i}>
-            <a target="_blank">
-              <Box key={i} maxWidth="250px" margin="15px">
-                <ArtworkCard tokenId={i} metadataUrl={url} />
-              </Box>
-            </a>
-          </Link>
-        ))}
+        {metadatas.length > 0 &&
+          metadatas.map((metadata, i) => (
+            <Link href={`/artwork/${i}`} passHref key={metadata.title}>
+              <a target="_blank">
+                <Box key={metadata.title} maxWidth="250px" margin="15px">
+                  <ArtworkCard metadata={metadata} tokenId={i} />
+                </Box>
+              </a>
+            </Link>
+          ))}
       </Section>
     </ContentWrapper>
   );

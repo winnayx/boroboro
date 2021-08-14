@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Box,
   Card,
@@ -7,7 +8,7 @@ import {
   Button,
   withStyles,
 } from "@material-ui/core";
-// import { MetadataJSONSchema, Token } from "~/api";
+import { ArtworkCardProps } from "../api/schemas";
 // import { ArtworkMedia } from "./ArtworkMedia";
 import Link from "next/link";
 
@@ -17,17 +18,18 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-export const ArtworkCard = (tokenId: number, metadataUrl: string) => {
+export const ArtworkCard: React.FC<ArtworkCardProps> = ({
+  tokenId,
+  metadata,
+}) => {
   return (
-    <Card data-target="artwork-card">
+    <Card>
       <CardContent>
-        <img
-          src="https://bafybeifscrqr2bd7khgu6j7jlmjf5x6koh632pd545w5sp6fbumq2iyrkq.ipfs.infura-ipfs.io/"
-          width="250px"
-        />
+        <img src={metadata.fileUrl} width="250px" />
       </CardContent>
-      {/* 
-      <CardActions>
+      <Typography>{metadata.artist}</Typography>
+
+      {/* <CardActions>
         {metadata && (
           <Box flexGrow={1}>
             <Box
@@ -36,22 +38,18 @@ export const ArtworkCard = (tokenId: number, metadataUrl: string) => {
               alignItems="center"
             >
               <Typography variant="subtitle1">
-                {metadata.properties.name.description}
+                {metadata.description}
               </Typography>
 
               <Typography variant="caption">
                 Editions:&nbsp;
-                {token.tokenSupply}
+                {tokenId}
               </Typography>
             </Box>
             <Box>
               <Typography variant="subtitle2">
-                {String(metadata.properties.description.description).slice(
-                  0,
-                  80
-                )}
-                {String(metadata.properties.description.description).length >
-                  80 && <>...</>}
+                {String(metadata.description).slice(0, 80)}
+                {String(metadata.description).length > 80 && <>...</>}
               </Typography>
             </Box>
           </Box>
@@ -68,3 +66,5 @@ export const ArtworkCard = (tokenId: number, metadataUrl: string) => {
     </Card>
   );
 };
+
+export default ArtworkCard;

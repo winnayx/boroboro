@@ -35,7 +35,11 @@ export default function Home() {
       </Head>
       <div>
         <StyledContainer maxWidth="sm">
-          <Typography variant="h2" align="center">
+          <Typography variant="h1" align="center">
+            Boroboro
+          </Typography>
+
+          <Typography variant="h4" align="center">
             Art Provenance Blockchain Tool
           </Typography>
           <StyledButton variant="contained" href="/mint">
