@@ -4,9 +4,11 @@ import {
   Card,
   CardActions,
   CardContent,
+  CardMedia,
   Typography,
   Button,
   withStyles,
+  makeStyles,
 } from "@material-ui/core";
 import { ArtworkCardProps } from "../api/schemas";
 // import { ArtworkMedia } from "./ArtworkMedia";
@@ -18,18 +20,32 @@ const StyledButton = withStyles({
   },
 })(Button);
 
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 345,
+  },
+  media: {
+    height: 250,
+  },
+});
+
 export const ArtworkCard: React.FC<ArtworkCardProps> = ({
   tokenId,
   metadata,
 }) => {
+  const classes = useStyles();
   return (
     <Card>
       <CardContent>
-        <img src={metadata.fileUrl} width="250px" />
+        <CardMedia
+          component="img"
+          image={metadata.fileUrl}
+          className={classes.media}
+          title={metadata.title}
+        />
       </CardContent>
-      <Typography>{metadata.artist}</Typography>
 
-      {/* <CardActions>
+      <CardActions>
         {metadata && (
           <Box flexGrow={1}>
             <Box
@@ -37,32 +53,37 @@ export const ArtworkCard: React.FC<ArtworkCardProps> = ({
               justifyContent="space-between"
               alignItems="center"
             >
-              <Typography variant="subtitle1">
-                {metadata.description}
-              </Typography>
+              <Typography variant="subtitle1">{metadata.title}</Typography>
 
               <Typography variant="caption">
-                Editions:&nbsp;
+                Token ID:&nbsp;
                 {tokenId}
               </Typography>
             </Box>
-            <Box>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <Typography variant="subtitle2">
-                {String(metadata.description).slice(0, 80)}
+                {String(metadata.artist).slice(0, 80)}
                 {String(metadata.description).length > 80 && <>...</>}
+              </Typography>
+              <Typography variant="subtitle2">
+                {String(metadata.year)}
               </Typography>
             </Box>
           </Box>
         )}
-      </CardActions> */}
+      </CardActions>
 
-      <CardActions>
+      {/* <CardActions>
         <Link href={`/sell/`} passHref>
           <StyledButton variant="contained" color="primary">
             Sell now
           </StyledButton>
         </Link>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 };

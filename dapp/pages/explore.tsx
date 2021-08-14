@@ -10,6 +10,11 @@ import { MetadataSchema } from "../src/api/schemas";
 import { SettingsSystemDaydreamTwoTone } from "@material-ui/icons";
 declare let window: any;
 
+const ExploreContainer = styled(Box)({
+  padding: "30px",
+  width: "100%",
+});
+
 export default function ExplorePage() {
   const [metadatas, setMetadatas] = useState<MetadataSchema[]>([]);
   const [contract, setContract] = useState(null);
@@ -59,22 +64,20 @@ export default function ExplorePage() {
   }, [metadatas]);
 
   return (
-    <ContentWrapper>
+    <ExploreContainer>
       <Typography variant="h2" gutterBottom>
         Explore
       </Typography>
-      <Section>
+      <Box style={{ display: "flex" }}>
         {metadatas.length > 0 &&
           metadatas.map((metadata, i) => (
             <Link href={`/artwork/${i}`} passHref key={metadata.title}>
-              <a target="_blank">
-                <Box key={metadata.title} maxWidth="250px" margin="15px">
-                  <ArtworkCard metadata={metadata} tokenId={i} />
-                </Box>
-              </a>
+              <Box key={metadata.title} maxWidth="250px" margin="15px">
+                <ArtworkCard metadata={metadata} tokenId={i} />
+              </Box>
             </Link>
           ))}
-      </Section>
-    </ContentWrapper>
+      </Box>
+    </ExploreContainer>
   );
 }
