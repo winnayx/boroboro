@@ -10,7 +10,7 @@ import { getWeb3, detectAccountChange } from "../src/api/web3";
 declare let window: any;
 
 export default function ExplorePage() {
-  const [tokens, setTokens] = useState<string[]>([]);
+  const [tokens, setTokens] = useState<any[]>([]);
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState<string>("");
   if (typeof window !== "undefined") {
@@ -38,7 +38,12 @@ export default function ExplorePage() {
                 .call({
                   from: "0x3b634db3a35da1488aeafb18f1be9108d8408e2c",
                 })
-                .then((url: string) => url);
+                .then((url: string) => {
+                  return fetch(url).then((data) => {
+                    // console.log(data.json());
+                    return data;
+                  });
+                });
             });
 
             Promise.all(newTokens).then(function (results) {
