@@ -13,6 +13,8 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@material-ui/pickers": "3.x.x",
+    "@metamask/detect-provider": "^1.2.0",
+    "bignumber.js": "^9.0.1",
     "final-form": "^4.20.2",
     "ipfs-http-client": "^51.0.0",
     "material-ui-dropzone": "^3.5.0",

@@ -16,6 +16,16 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    textDecoration: "none",
+    color: "black",
+  },
+  siteTitle: {
+    flexGrow: 1,
+    textDecoration: "none",
+    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    textTransform: "uppercase",
   },
 }));
 
@@ -38,32 +48,32 @@ export const Header = () => {
             <Typography
               variant="h6"
               component="a"
-              style={{ textDecoration: "none" }}
-              className={classes.title}
+              className={classes.siteTitle}
             >
-              CS191 Project
+              Boroboro &#9641;
             </Typography>
           </Link>
-          <Link href="/" passHref>
-            <Typography
-              variant="h6"
-              component="a"
-              style={{ textDecoration: "none" }}
-              className={classes.title}
-            >
+          <Link href="/explore" passHref>
+            <Typography variant="h6" component="a" className={classes.title}>
               Explore
             </Typography>
           </Link>
           <Link href="/mint" passHref>
-            <Typography
-              variant="h6"
-              component="a"
-              style={{ textDecoration: "none" }}
-              className={classes.title}
-            >
-              Mint an Artwork
+            <Typography variant="h6" component="a" className={classes.title}>
+              Mint Art
             </Typography>
           </Link>
+          <Link href="/update" passHref>
+            <Typography variant="h6" component="a" className={classes.title}>
+              Update Art
+            </Typography>
+          </Link>
+          <Link href="/about" passHref>
+            <Typography variant="h6" component="a" className={classes.title}>
+              About
+            </Typography>
+          </Link>
+
           {/* <Button color="inherit">Login</Button> */}
         </Toolbar>
       </AppBar>

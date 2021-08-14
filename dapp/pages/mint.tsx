@@ -1,12 +1,11 @@
 import { Button, Box, Typography, TextField } from "@material-ui/core";
 import { DropzoneArea } from "material-ui-dropzone";
-import Web3 from "web3";
 import { useEffect, useState } from "react";
 import { styled, makeStyles } from "@material-ui/core/styles";
-import type { AbiItem } from "web3-utils";
 import ContentWrapper from "../src/features/contentWrapper";
 import { uploadFileToIPFS, uploadMetadata } from "../src/api/ipfs";
-import { ARTWORK_ADDRESS, ARTWORK_ABI } from "../contractConfig";
+import { getWeb3, detectAccountChange } from "../src/api/web3";
+
 import {
   ArtworkErrorSchema,
   ArtworkSchema,
@@ -33,11 +32,6 @@ const initialTextFieldErrorState = {
   creator: false,
   owner: false,
 };
-
-const required = (value: string) =>
-  typeof value !== "undefined" && value ? undefined : "This field is required";
-
-const minting = false;
 
 const Section = styled(Box)({
   margin: "20px 0",
@@ -85,27 +79,20 @@ export default function MintPage() {
   );
   const [contract, setContract] = useState<any>({});
   const classes = useStyles();
-  useEffect(() => {
-    const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
-    web3.eth.requestAccounts().then((accts) => setAccount(accts[0]));
-    const contractInstance = new web3.eth.Contract(
-      ARTWORK_ABI as AbiItem[],
-      ARTWORK_ADDRESS
-    );
-    setContract(contractInstance);
-  }, []);
+
+  if (typeof window !== "undefined") {
+    window.ethereum.on("accountsChanged", function (accounts: string[]) {
+      console.log("account changed", accounts[0]);
+      setAccount(accounts[0]);
+    });
+  }
 
   useEffect(() => {
-    function detectAccountChange() {
-      if (window.ethereum) {
-        window.ethereum.on("accountsChanged", (accts: any) => {
-          const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
-          web3.eth.requestAccounts().then((accounts) => setAccount(accts[0]));
-        });
-      }
-    }
-    detectAccountChange();
-  });
+    getWeb3().then(({ accts, contractInstance }) => {
+      setAccount(accts[0]);
+      setContract(contractInstance);
+    });
+  }, []);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -276,7 +263,6 @@ export default function MintPage() {
           />
         </Section>
 
-        {/* <Button type="submit" variant="contained" color="primary"> */}
         <Button
           type="submit"
           classes={{
