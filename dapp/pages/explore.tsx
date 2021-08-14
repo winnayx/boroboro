@@ -5,9 +5,8 @@ import { styled, makeStyles } from "@material-ui/core/styles";
 import ContentWrapper from "../src/features/contentWrapper";
 import Section from "../src/features/section";
 import ArtworkCard from "../src/features/ArtworkCard";
-import { getWeb3, detectAccountChange } from "../src/api/web3";
+import { getWeb3 } from "../src/api/web3";
 import { MetadataSchema } from "../src/api/schemas";
-import { SettingsSystemDaydreamTwoTone } from "@material-ui/icons";
 declare let window: any;
 
 const ExploreContainer = styled(Box)({
@@ -68,12 +67,12 @@ export default function ExplorePage() {
       <Typography variant="h2" gutterBottom>
         Explore
       </Typography>
-      <Box style={{ display: "flex" }}>
+      <Box style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr" }}>
         {metadatas.length > 0 &&
           metadatas.map((metadata, i) => (
-            <Link href={`/artwork/${i}`} passHref key={metadata.title}>
+            <Link href={`/artwork/${i + 1}`} passHref key={metadata.title}>
               <Box key={metadata.title} maxWidth="250px" margin="15px">
-                <ArtworkCard metadata={metadata} tokenId={i} />
+                <ArtworkCard metadata={metadata} tokenId={i + 1} />
               </Box>
             </Link>
           ))}

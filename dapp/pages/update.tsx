@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Box, Typography, TextField } from "@material-ui/core";
 import { styled, makeStyles } from "@material-ui/core/styles";
-import Web3 from "web3";
-import type { AbiItem } from "web3-utils";
-import { ARTWORK_ABI, ARTWORK_ADDRESS } from "../contractConfig";
+import { getWeb3 } from "../src/api/web3";
 import ContentWrapper from "../src/features/contentWrapper";
 
 const Section = styled(Box)({
@@ -32,27 +30,20 @@ export default function MintPage() {
   const [verifyError, setVerifyError] = useState(false);
   const [verified, setVerified] = useState(false);
 
-  useEffect(() => {
-    const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
-    web3.eth.requestAccounts().then((accts) => setAccount(accts[0]));
-    const contractInstance = new web3.eth.Contract(
-      ARTWORK_ABI as AbiItem[],
-      ARTWORK_ADDRESS
-    );
-    setContract(contractInstance);
-  }, []);
+  if (typeof window !== "undefined") {
+    window.ethereum.on("accountsChanged", function (accounts: string[]) {
+      console.log("account changed", accounts[0]);
+      setAccount(accounts[0]);
+    });
+  }
 
   useEffect(() => {
-    function detectAccountChange() {
-      if (window.ethereum) {
-        window.ethereum.on("accountsChanged", (accts: any) => {
-          const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
-          web3.eth.requestAccounts().then((accounts) => setAccount(accts[0]));
-        });
-      }
-    }
-    detectAccountChange();
-  });
+    getWeb3().then(({ accts, contractInstance }) => {
+      setAccount(accts[0]);
+      setContract(contractInstance);
+    });
+  }, []);
+
   const checkOwnership = async (tokenId: number) => {
     try {
       return await contract.methods
@@ -86,27 +77,41 @@ export default function MintPage() {
     }
   };
 
-  const updateProvenance = () => {};
-  const handleSubmit = async (event: any) => {
+  const updateProvenance = async (event: any) => {
+    event.preventDefault();
+    const newOwner = event.target.value;
+    try {
+      contract.methods
+        .safeTransferFrom(account, newOwner, tokenId)
+        .send({ from: "0x3b634Db3a35da1488AEafB18F1be9108D8408e2C" })
+        .on("transactionHash", (hash: string) => {
+          console.log(hash);
+        })
+        .on("error", (error: string) => {
+          console.log(error);
+        });
+    } catch (e) {
+      console.log("ERROR in safeTransferFrom");
+    }
+  };
+
+  const verifyOwner = async (event: any) => {
     event.preventDefault();
     try {
       contract.methods
         .ownerOf(tokenId)
-        .call(
-          { from: "0x3b634Db3a35da1488AEafB18F1be9108D8408e2C" },
-          function (err: any, rightfulOwner: any) {
-            if (err) {
-              setVerifyError(true);
-              return false;
-            }
-            if (rightfulOwner.toString() === account.toString()) {
-              console.log("Is right");
-              setVerified(true);
-            } else {
-              console.log("nah");
-            }
+        .call({ from: account }, function (err: any, rightfulOwner: any) {
+          if (err) {
+            setVerifyError(true);
+            return false;
           }
-        );
+          if (rightfulOwner.toString() === account.toString()) {
+            console.log("Is right");
+            setVerified(true);
+          } else {
+            setVerifyError(true);
+          }
+        });
     } catch (e) {
       setVerifyError(true);
       return false;
@@ -150,7 +155,7 @@ export default function MintPage() {
             Provide token ID of artwork to check ownership and rights to modify
             provenance.
           </Typography>
-          <form noValidate onSubmit={handleSubmit}>
+          <form noValidate onSubmit={verifyOwner}>
             <Section>
               <TextField
                 id="tokenId"
@@ -165,7 +170,7 @@ export default function MintPage() {
               />
               {verifyError && (
                 <Typography color="error" variant="overline">
-                  Error: token ID does not exist
+                  Error: token ID does not match current Metamask account.
                 </Typography>
               )}
             </Section>

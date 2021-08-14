@@ -67,7 +67,6 @@ export const ArtworkCard: React.FC<ArtworkCardProps> = ({
             >
               <Typography variant="subtitle2">
                 {String(metadata.artist).slice(0, 80)}
-                {String(metadata.description).length > 80 && <>...</>}
               </Typography>
               <Typography variant="subtitle2">
                 {String(metadata.year)}
