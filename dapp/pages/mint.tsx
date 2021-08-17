@@ -1,10 +1,18 @@
-import { Button, Box, Typography, TextField } from "@material-ui/core";
+import {
+  Button,
+  Box,
+  Typography,
+  TextField,
+  Dialog,
+  DialogTitle,
+} from "@material-ui/core";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useEffect, useState } from "react";
+import Web3 from "web3";
 import { styled, makeStyles } from "@material-ui/core/styles";
 import ContentWrapper from "../src/features/contentWrapper";
 import { uploadFileToIPFS, uploadMetadata } from "../src/api/ipfs";
-import { getWeb3, detectAccountChange } from "../src/api/web3";
+import { getWeb3 } from "../src/api/web3";
 
 import {
   ArtworkErrorSchema,
@@ -74,6 +82,7 @@ const validateForm = (
 export default function MintPage() {
   const [artwork, setArtwork] = useState<ArtworkSchema>(initialArtworkState);
   const [account, setAccount] = useState<string>("");
+  const [tokenId, setTokenId] = useState(0);
   const [textFieldError, setTextFieldError] = useState<ArtworkErrorSchema>(
     initialTextFieldErrorState
   );
@@ -119,6 +128,11 @@ export default function MintPage() {
         })
         .on("error", (error: string) => {
           console.log(error);
+        })
+        .on("receipt", (receipt: any) => {
+          setTokenId(
+            Web3.utils.hexToNumber(receipt.events.Transfer.raw.topics[3])
+          );
         });
     } catch (e) {
       console.log("Minting failed with error:", e);
@@ -179,6 +193,14 @@ export default function MintPage() {
 
   return (
     <ContentWrapper>
+      <Dialog open={tokenId !== 0}>
+        <DialogTitle id="simple-dialog-title">Success</DialogTitle>
+        <Typography style={{ padding: "16px 24px" }}>
+          The Token ID for {artwork.title} is {tokenId}.
+          <br />
+          Please record the token ID somewhere safe.
+        </Typography>
+      </Dialog>
       <form noValidate onSubmit={handleSubmit}>
         <Section>
           <Typography variant="h2" gutterBottom>

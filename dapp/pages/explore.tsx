@@ -70,11 +70,11 @@ export default function ExplorePage() {
       <Box style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr" }}>
         {metadatas.length > 0 &&
           metadatas.map((metadata, i) => (
-            <Link href={`/artwork/${i + 1}`} passHref key={metadata.title}>
-              <Box key={metadata.title} maxWidth="250px" margin="15px">
-                <ArtworkCard metadata={metadata} tokenId={i + 1} />
-              </Box>
-            </Link>
+            // <Link href={`/artwork/${i + 1}`} passHref key={metadata.title}>
+            <Box key={metadata.title} maxWidth="250px" margin="15px">
+              <ArtworkCard metadata={metadata} tokenId={i + 1} />
+            </Box>
+            // </Link>
           ))}
       </Box>
     </ExploreContainer>
