@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Box, Typography, TextField } from "@material-ui/core";
 import { styled, makeStyles } from "@material-ui/core/styles";
-import { getWeb3 } from "../src/api/web3";
+import { getWeb3, getOwner } from "../src/api/web3";
 import ContentWrapper from "../src/features/contentWrapper";
 
 const Section = styled(Box)({
@@ -26,6 +26,7 @@ export default function MintPage() {
   const classes = useStyles();
   const [tokenId, setTokenId] = useState(0);
   const [account, setAccount] = useState("");
+  const [newOwner, setNewOwner] = useState("");
   const [contract, setContract] = useState<any>({});
   const [verifyError, setVerifyError] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -34,6 +35,7 @@ export default function MintPage() {
     window.ethereum.on("accountsChanged", function (accounts: string[]) {
       console.log("account changed", accounts[0]);
       setAccount(accounts[0]);
+      setVerified(false);
     });
   }
 
@@ -44,42 +46,23 @@ export default function MintPage() {
     });
   }, []);
 
-  const checkOwnership = async (tokenId: number) => {
-    try {
-      return await contract.methods
-        .ownerOf(tokenId)
-        .call(
-          { from: "0x3b634Db3a35da1488AEafB18F1be9108D8408e2C" },
-          function (err: any, rightfulOwner: any) {
-            if (err) {
-              return false;
-            }
-            console.log("account:", account, rightfulOwner);
-            console.log(rightfulOwner.toString() === account.toString());
-            return rightfulOwner.toString() === account.toString();
-          }
-        );
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  };
-
   const handleChange = (event: any) => {
     event.preventDefault();
     switch (event.target.id) {
       case "tokenId":
         setTokenId(event.target.value);
         break;
+      case "newOwner":
+        setNewOwner(event.target.value);
+        break;
       default:
-        console.log("neither cases. weird");
         break;
     }
   };
 
   const updateProvenance = async (event: any) => {
     event.preventDefault();
-    const newOwner = event.target.value;
+    console.log(account, newOwner, tokenId);
     try {
       contract.methods
         .safeTransferFrom(account, newOwner, tokenId)
@@ -89,13 +72,16 @@ export default function MintPage() {
         })
         .on("error", (error: string) => {
           console.log(error);
+        })
+        .on("receipt", (receipt: any) => {
+          console.log(receipt);
         });
     } catch (e) {
-      console.log("ERROR in safeTransferFrom");
+      console.log("ERROR in safeTransferFrom", e);
     }
   };
 
-  const verifyOwner = async (event: any) => {
+  const verifyOwnership = async (event: any) => {
     event.preventDefault();
     try {
       contract.methods
@@ -113,6 +99,8 @@ export default function MintPage() {
           }
         });
     } catch (e) {
+      console.log("ERROR in ownerOf", e);
+
       setVerifyError(true);
       return false;
     }
@@ -155,7 +143,7 @@ export default function MintPage() {
             Provide token ID of artwork to check ownership and rights to modify
             provenance.
           </Typography>
-          <form noValidate onSubmit={verifyOwner}>
+          <form noValidate onSubmit={verifyOwnership}>
             <Section>
               <TextField
                 id="tokenId"
