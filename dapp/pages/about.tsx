@@ -9,7 +9,7 @@ export default function AboutPage() {
   return (
     <Section>
       <Typography variant="h2">About</Typography>
-      <Typography variant="h4">What is Boroboro?</Typography>
+      <Typography variant="h4">What is BOROBORO?</Typography>
 
       <Typography>
         Boroboro uses the Ethereum blockchain to provide provenance and

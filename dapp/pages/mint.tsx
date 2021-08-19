@@ -196,7 +196,7 @@ export default function MintPage() {
       <Dialog open={tokenId !== 0}>
         <DialogTitle id="simple-dialog-title">Success</DialogTitle>
         <Typography style={{ padding: "16px 24px" }}>
-          The Token ID for {artwork.title} is {tokenId}.
+          The Token ID for <i>{artwork.title}</i> is <b>{tokenId}</b>.
           <br />
           Please record the token ID somewhere safe.
         </Typography>
@@ -293,6 +293,10 @@ export default function MintPage() {
         >
           Mint Artwork
         </Button>
+        <br />
+        <Typography color="error" variant="overline">
+          Please do not exit or refresh page until dialog pops up.
+        </Typography>
       </form>
     </ContentWrapper>
   );

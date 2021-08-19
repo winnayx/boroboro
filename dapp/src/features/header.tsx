@@ -36,21 +36,13 @@ export const Header = () => {
     <div className={classes.root}>
       <AppBar position="static" color="transparent">
         <Toolbar>
-          {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton> */}
           <Link href="/" passHref>
             <Typography
               variant="h6"
               component="a"
               className={classes.siteTitle}
             >
-              Boroboro &#9641;
+              BOROBORO
             </Typography>
           </Link>
           <Link href="/explore" passHref>
@@ -73,8 +65,6 @@ export const Header = () => {
               About
             </Typography>
           </Link>
-
-          {/* <Button color="inherit">Login</Button> */}
         </Toolbar>
       </AppBar>
     </div>

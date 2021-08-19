@@ -9,13 +9,13 @@ Frontend
 - [ ] /mint for creating a artwork token on the blockchain
 - [ ] / for landing page that displays the artwork
 - [ ] menu bar for connecting to metamask
+- [ ] Add feedback response (i.e. Minting, Success, Fail)
+- [ ] Add ability to select artwork from /explore to update provenance
 
 Backend
 
 - [ ] Make sure user is on the Rinkeby test network
 - [ ] Simple ERC721 contract
-
-
 
 ## Description of the dapp
 
@@ -147,9 +147,9 @@ Nowadays, the middle men charges excessive amount for just providing a minimum s
 
 1. MaterialUI: https://ant.design/
    - Input, Radio, Card, Col, Row, Layout, Alert, message, Button, Menu, Icon, Search
-8. React, Component: https://reactjs.org/
-9. PropTypes: https://www.npmjs.com/package/prop-types
-10. \_: http://underscorejs.org/
+2. React, Component: https://reactjs.org/
+3. PropTypes: https://www.npmjs.com/package/prop-types
+4. \_: http://underscorejs.org/
 
 ### Layout for tokenURI JSON string
 

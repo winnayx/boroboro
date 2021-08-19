@@ -19,12 +19,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <React.Fragment>
       <Head>
-        <title>CS191 Project</title>
+        <title>BOROBORO: Provenance via Blockchain</title>
         <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
+          name="description"
+          content="BOROBORO - Provenance via Blockchain"
         />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />

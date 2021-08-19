@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button, Box, Typography, TextField } from "@material-ui/core";
-import { styled, makeStyles } from "@material-ui/core/styles";
-import ContentWrapper from "../src/features/contentWrapper";
-import Section from "../src/features/section";
+import { makeStyles } from "@material-ui/core/styles";
 import ArtworkCard from "../src/features/ArtworkCard";
 import { getWeb3 } from "../src/api/web3";
 import { MetadataSchema } from "../src/api/schemas";
 declare let window: any;
 
-const ExploreContainer = styled(Box)({
-  padding: "30px",
-  width: "100%",
+const useStyles = makeStyles({
+  container: {
+    padding: "30px",
+    width: "100%",
+  },
 });
 
 export default function ExplorePage() {
   const [metadatas, setMetadatas] = useState<MetadataSchema[]>([]);
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState<string>("");
+
+  const classes = useStyles();
+
   if (typeof window !== "undefined") {
     window.ethereum.on("accountsChanged", function (accounts: string[]) {
       console.log("account changed", accounts[0]);
@@ -58,25 +61,24 @@ export default function ExplorePage() {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(metadatas);
-  }, [metadatas]);
-
   return (
-    <ExploreContainer>
+    <Box className={classes.container}>
       <Typography variant="h2" gutterBottom>
         Explore
       </Typography>
       <Box style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr" }}>
         {metadatas.length > 0 &&
-          metadatas.map((metadata, i) => (
-            // <Link href={`/artwork/${i + 1}`} passHref key={metadata.title}>
-            <Box key={metadata.title} maxWidth="250px" margin="15px">
-              <ArtworkCard metadata={metadata} tokenId={i + 1} />
-            </Box>
-            // </Link>
-          ))}
+          metadatas
+            .slice(0)
+            .reverse()
+            .map((metadata, i) => (
+              // <Link href={`/artwork/${i + 1}`} passHref key={metadata.title}>
+              <Box key={metadata.title} maxWidth="250px" margin="15px">
+                <ArtworkCard metadata={metadata} tokenId={i + 1} />
+              </Box>
+              // </Link>
+            ))}
       </Box>
-    </ExploreContainer>
+    </Box>
   );
 }
