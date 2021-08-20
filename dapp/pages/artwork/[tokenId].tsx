@@ -1,10 +1,8 @@
 import { getToken, getOwner } from "../../src/api/web3";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { MetadataSchema } from "../../src/api/schemas";
 import ContentWrapper from "../../src/features/contentWrapper";
-import BigNumber from "bignumber.js";
-import { Button, Box, Typography, TextField } from "@material-ui/core";
+import { Button, Box, Typography } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -28,12 +26,6 @@ function ArtworkPage({ query: { tokenId } }) {
   const [metadata, setMetadata] = useState<MetadataSchema>(initialMetadata);
   const [owner, setOwner] = useState("");
 
-  // useEffect(() => {
-  //   if (tokenId) {
-  //     console.log("update: ", tokenId);
-  //   }
-  // }, [tokenId]);
-
   useEffect(() => {
     getToken(tokenId).then((metadata) => setMetadata(metadata));
   }, [tokenId]);
@@ -50,7 +42,6 @@ function ArtworkPage({ query: { tokenId } }) {
             {metadata.title}
           </Typography>
           <Box>
-            <img src={metadata.fileUrl} className={classes.image} />
             <Box>
               <List>
                 <ListItem>
@@ -64,6 +55,8 @@ function ArtworkPage({ query: { tokenId } }) {
                 </ListItem>
               </List>
             </Box>
+
+            <img src={metadata.fileUrl} className={classes.image} />
           </Box>
         </>
       )}
