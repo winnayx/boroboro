@@ -23,20 +23,24 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ArtworkPage() {
-  const router = useRouter();
+function ArtworkPage({ query: { tokenId } }) {
   const classes = useStyles();
-  const { tokenId } = router.query;
   const [metadata, setMetadata] = useState<MetadataSchema>(initialMetadata);
   const [owner, setOwner] = useState("");
 
-  useEffect(() => {
-    getToken(new BigNumber(tokenId)).then((metadata) => setMetadata(metadata));
-  }, []);
+  // useEffect(() => {
+  //   if (tokenId) {
+  //     console.log("update: ", tokenId);
+  //   }
+  // }, [tokenId]);
 
   useEffect(() => {
-    getOwner(new BigNumber(tokenId)).then((owner) => setOwner(owner));
-  }, []);
+    getToken(tokenId).then((metadata) => setMetadata(metadata));
+  }, [tokenId]);
+
+  useEffect(() => {
+    getOwner(tokenId).then((owner) => setOwner(owner));
+  }, [tokenId]);
 
   return (
     <ContentWrapper>
@@ -66,3 +70,9 @@ export default function ArtworkPage() {
     </ContentWrapper>
   );
 }
+
+ArtworkPage.getInitialProps = async ({ query }) => {
+  return { query };
+};
+
+export default ArtworkPage;
