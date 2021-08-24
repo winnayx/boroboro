@@ -34,7 +34,7 @@ export default function GettingStartedRinkeby() {
       <Typography variant="h4" className={classes.typographySpacingSmall}>
         Prerequisites
       </Typography>
-      <Box clone display="flex" alignItems="center">
+      <Box>
         <Typography
           component="a"
           href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn"

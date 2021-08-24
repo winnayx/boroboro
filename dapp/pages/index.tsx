@@ -68,7 +68,7 @@ export default function Home() {
             <Grid item xs={6}>
               <Typography variant="h2">Explore</Typography>
               <Typography variant="h5">
-                Check out existing artworks secured on Ethereum using Boroboro
+                Check out existing artworks secured on Ethereum using BOROBORO
               </Typography>
               <Button
                 className={classes.button}
@@ -121,7 +121,7 @@ export default function Home() {
               <Typography variant="h2">Mint an Artwork</Typography>
               <Typography variant="h5">
                 Establish the authenticity and ownership of artwork on Ethereum
-                using Boroboro.
+                using BOROBORO.
               </Typography>
               <Button
                 className={classes.button}

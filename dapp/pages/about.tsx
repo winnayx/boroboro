@@ -93,15 +93,16 @@ export default function AboutPage() {
             Motivation
           </Typography>
           <Typography className={classes.typographySpacingSmall}>
-            Boroboro is an open-source project created for Stanford's CS191:
-            Senior Project class.
+            BOROBORO is an open-source project created for CS191: Senior Project
+            at Stanford University.
           </Typography>
           <Typography className={classes.typographySpacingNormal}>
-            Combining my interest in blockchain and contemporary art, I wanted
-            to create a dApp that seeks to address certain problems within the
-            art world for my senior project. Based on my researc, provenance
-            appeared to be an issue that is naturally addressed and solvable by
-            emerging blockchain technologies. As a result, BOROBORO was created.
+            Combining my interest in blockchain and contemporary art market, I
+            wanted to create a dApp that seeks to address certain problems
+            within the art world for my senior project. Based on my research,
+            provenance appeared to be an issue naturally addressed and solvable
+            by applying emerging blockchain technologies. As a result, BOROBORO
+            was created.
           </Typography>
 
           <Typography
@@ -130,13 +131,28 @@ export default function AboutPage() {
           </Typography>
           <Typography className={classes.typographySpacingNormal}>
             Provenance is the chronology of the ownership, custody or location
-            of an art or historical object. Provenance has become increasingly
-            important in helping establish the moral and legal validity of a
-            chain of custody. Sometimes, a piece with interesting provenance may
-            increase its value. Most of the time, however, provenance is
-            important in confirming legitimate ownership and authenticity.
-            Unscrupulous sellers may forge provenance. Read more on the problem
-            of provenance: https://www.artbusiness.com/provwarn.html
+            of an art or historical object (Wikipedia). Provenance has become
+            increasingly important in helping establish the moral and legal
+            validity of a chain of custody. Sometimes, a piece with interesting
+            provenance may increase its value. Most of the time, however,
+            provenance is important in confirming legitimate ownership and
+            authenticity of a work of art. Unscrupulous sellers may forge
+            provenance to take advantage of collectors.
+          </Typography>
+          <Typography className={classes.typographySpacingNormal}>
+            Read more on the problem of provenance at these sites:
+            <br />
+            <a href="https://www.artbusiness.com/provwarn.html">
+              https://www.artbusiness.com/provwarn.html
+            </a>{" "}
+            <br />
+            <a href="https://news.artnet.com/market/the-importance-of-provenance-in-determining-authenticity-29953">
+              https://news.artnet.com/market/the-importance-of-provenance-in-determining-authenticity-29953
+            </a>
+            <br />
+            <a href="https://www.lofty.com/pages/what-is-provenance-and-why-is-it-important">
+              https://www.lofty.com/pages/what-is-provenance-and-why-is-it-important
+            </a>
           </Typography>
           <Typography variant="h4" className={classes.typographySpacingSmall}>
             How does Blockchain help?
@@ -145,23 +161,17 @@ export default function AboutPage() {
             By minting an artwork on the blockchain, creator(s) of an artwork
             can securely add, verify, and transfer the artwork. BOROBORO seeks
             to provide a simple and minimalistic interface to enable creatives
-            to use the blockchain in such a way. The transaction history on the
-            blockchain provides an digital record of provenance-related events.{" "}
+            to use the blockchain in such a way.
           </Typography>
-          <Typography className={classes.typographySpacingSmall}>
-            Previously, there lacked a single source of truth for the provenance
-            of artwork and it was highly disputable. With the help of
-            blockchain, this problem can be improved and explore new
-            territories. Forged provenance{" "}
-          </Typography>
-
           <Typography className={classes.typographySpacingNormal}>
-            If documents are lost, re-establishing provenance can be nearly
-            impossible. Even with digital files, danger comes. If laptop
-            crashes, file goes; if servers get compromised, they go too.
-            Therefore, blockchain offers a secure solution.{" "}
+            Previously, there lacked a secure, single source of truth for the
+            provenance of an object of art and provenance may be a highly
+            disputable issue. For an old artwork, the loss of a written record
+            could mean the loss of its provenance. The digital and decentralized
+            nature of the blockchain provides a trustworthy and resilient single
+            source of truth. By using it, we achieve the goal of securely
+            recording provenance-related events.
           </Typography>
-
           <Typography
             id="contact"
             variant="h4"
@@ -169,7 +179,7 @@ export default function AboutPage() {
           >
             Why open-source matters to art provenance?
           </Typography>
-          <Typography className={classes.typographySpacingNormal}>
+          <Typography className={classes.typographySpacingSmall}>
             Currently, there exists paid agencies and companies that offer
             artists and galleries blockchain solutions to provenance and art
             certification. Nonetheless, a centralized institution governing the
@@ -198,11 +208,12 @@ export default function AboutPage() {
             Step 1
           </Typography>
           <Typography className={classes.typographySpacingNormal}>
-            An artist or representing gallery connects their Metamask wallet to
-            BOROBORO. They mint an artwork on Ethereum via BOROBORO using the
-            mint page. Upon minting, their Metamask wallets will be deducted the
-            corresponding amount of gas fees, which depends on the blockchain
-            traffick at the time.
+            An artist or their representing gallery connects their Metamask
+            wallet account to BOROBORO on the explore, mint, or update pages.
+            They mint an artwork on Ethereum via BOROBORO by submitting the form
+            on mint page. Upon minting, their Metamask wallets will be deducted
+            the corresponding amount of gas fees, which is dependent on the
+            traffick on the blockchain at the time.
           </Typography>
           <Typography className={classes.typographySpacingNormal}>
             The artist/gallery receives a unique token ID upon successful
