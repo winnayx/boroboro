@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Button, Box, Typography, TextField } from "@material-ui/core";
+import {
+  Button,
+  Box,
+  Typography,
+  TextField,
+  Dialog,
+  DialogTitle,
+  CircularProgress,
+} from "@material-ui/core";
 import { styled, makeStyles } from "@material-ui/core/styles";
 import { getWeb3, getOwner } from "../src/api/web3";
 import ContentWrapper from "../src/features/contentWrapper";
@@ -30,12 +38,13 @@ export default function MintPage() {
   const [contract, setContract] = useState<any>({});
   const [verifyError, setVerifyError] = useState(false);
   const [verified, setVerified] = useState(false);
+  const [transferred, setTransferred] = useState(0);
 
   if (typeof window !== "undefined") {
     window.ethereum.on("accountsChanged", function (accounts: string[]) {
       console.log("account changed", accounts[0]);
       setAccount(accounts[0]);
-      setVerified(false);
+      setVerifyError(false);
     });
   }
 
@@ -63,6 +72,7 @@ export default function MintPage() {
   const updateProvenance = async (event: any) => {
     event.preventDefault();
     console.log(account, newOwner, tokenId);
+    setTransferred(-1);
     try {
       contract.methods
         .safeTransferFrom(account, newOwner, tokenId)
@@ -74,6 +84,7 @@ export default function MintPage() {
           console.log(error);
         })
         .on("receipt", (receipt: any) => {
+          setTransferred(1);
           console.log(receipt);
         });
     } catch (e) {
@@ -86,34 +97,58 @@ export default function MintPage() {
     try {
       contract.methods
         .ownerOf(tokenId)
-        .call({ from: account }, function (err: any, rightfulOwner: any) {
+        .call({ from: account }, function (err: any, rightfulOwner: string) {
           if (err) {
             setVerifyError(true);
-            return false;
+            console.log(err);
           }
-          if (rightfulOwner.toString() === account.toString()) {
-            console.log("Is right");
+          if (rightfulOwner.toLowerCase() === account.toLowerCase()) {
+            console.log(rightfulOwner, "===", account);
             setVerified(true);
           } else {
+            console.log(rightfulOwner, "!==", account);
             setVerifyError(true);
+
+            // to check which char was wrong
+            // for (var c = 0; c < rightfulOwner.length; c++) {
+            //   if (rightfulOwner.charCodeAt(c) != account.charCodeAt(c)) {
+            //     alert(
+            //       "c:" +
+            //         c +
+            //         " " +
+            //         rightfulOwner.charCodeAt(c) +
+            //         "!=" +
+            //         account.charCodeAt(c)
+            //     );
+            //     break;
+            //   }
+            // }
           }
         });
     } catch (e) {
-      console.log("ERROR in ownerOf", e);
-
+      console.log("ERROR in contract.ownerOf", e);
       setVerifyError(true);
-      return false;
     }
   };
 
   return (
     <ContentWrapper>
+      <Dialog open={transferred > 0} onClose={() => setTransferred(0)}>
+        <DialogTitle id="simple-dialog-title">Success</DialogTitle>
+        <Typography style={{ padding: "16px 24px" }}>
+          Artwork with token ID <b>{tokenId}</b> is transferred from{" "}
+          <b>{account}</b> to <b>{newOwner}</b>
+        </Typography>
+      </Dialog>
+
       <Typography variant="h2" gutterBottom>
         Update Provenance
       </Typography>
       {verified ? (
         <Section>
-          <Typography>Verfied ✅. Provide address of new owner.</Typography>
+          <Typography>
+            Verfied ✅. Provide wallet address of new owner.
+          </Typography>
           <form noValidate onSubmit={updateProvenance}>
             <Section>
               <TextField
@@ -133,15 +168,27 @@ export default function MintPage() {
                 root: classes.root,
               }}
             >
-              Transfer Ownership
+              {transferred < 0 ? (
+                <>
+                  <p>Transferring</p>
+                  <CircularProgress />
+                </>
+              ) : (
+                <p>Transfer Ownership</p>
+              )}
             </Button>
+            <br />
+            <Typography color="error" variant="overline">
+              Please do not exit or refresh page until dialog pops up.
+            </Typography>
           </form>
         </Section>
       ) : (
         <Section>
           <Typography>
-            Provide token ID of artwork to check ownership and rights to modify
-            provenance.
+            Provide token ID of artwork. <br />
+            We will perform a quick check to verify that the current Metamask
+            account is the token's rightful owner.
           </Typography>
           <form noValidate onSubmit={verifyOwnership}>
             <Section>
@@ -153,8 +200,6 @@ export default function MintPage() {
                 fullWidth
                 margin="normal"
                 onChange={handleChange}
-                // error={textFieldError.title}
-                // helperText={textFieldError.title ? "Required field" : ""}
               />
               {verifyError && (
                 <Typography color="error" variant="overline">

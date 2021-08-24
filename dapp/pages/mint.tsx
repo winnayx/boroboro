@@ -5,6 +5,7 @@ import {
   TextField,
   Dialog,
   DialogTitle,
+  CircularProgress,
 } from "@material-ui/core";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useEffect, useState } from "react";
@@ -83,6 +84,7 @@ export default function MintPage() {
   const [artwork, setArtwork] = useState<ArtworkSchema>(initialArtworkState);
   const [account, setAccount] = useState<string>("");
   const [tokenId, setTokenId] = useState(0);
+  const [minting, setMinting] = useState(false);
   const [textFieldError, setTextFieldError] = useState<ArtworkErrorSchema>(
     initialTextFieldErrorState
   );
@@ -112,7 +114,7 @@ export default function MintPage() {
     if (error) {
       return;
     }
-
+    setTokenId(-1);
     try {
       const { fullPath } = await uploadFileToIPFS(artwork.files[0]);
       const metadata = constructMetadata(artwork, fullPath);
@@ -193,7 +195,7 @@ export default function MintPage() {
 
   return (
     <ContentWrapper>
-      <Dialog open={tokenId !== 0}>
+      <Dialog open={tokenId > 0} onClose={() => setTokenId(0)}>
         <DialogTitle id="simple-dialog-title">Success</DialogTitle>
         <Typography style={{ padding: "16px 24px" }}>
           The Token ID for <i>{artwork.title}</i> is <b>{tokenId}</b>.
@@ -291,7 +293,14 @@ export default function MintPage() {
             root: classes.root, // class name, e.g. `classes-nesting-root-x`
           }}
         >
-          Mint Artwork
+          {tokenId < 0 ? (
+            <>
+              <CircularProgress />
+              <p>minting</p>
+            </>
+          ) : (
+            <p>mint now</p>
+          )}
         </Button>
         <br />
         <Typography color="error" variant="overline">
