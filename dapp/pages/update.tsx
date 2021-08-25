@@ -188,7 +188,7 @@ export default function MintPage() {
           <Typography>
             Provide token ID of artwork. <br />
             We will perform a quick check to verify that the current Metamask
-            account is the token's rightful owner.
+            account is the rightful owner of the token.
           </Typography>
           <form noValidate onSubmit={verifyOwnership}>
             <Section>

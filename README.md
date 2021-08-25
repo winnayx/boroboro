@@ -10,6 +10,8 @@ Historically, authenticity and provenance have always posed enormous issues for 
 
 For my senior project, I created a tool that abstracts the Ethereum blockchain & IPFS mechanisms to allow artists & galleries to record works of art on-chain, making the transaction history credible in a transparent and fraud-preventing way.
 
+
+
 ## Major Art World Problem: Authenticity & Provenance
 
 - Billion dollar industry in selling fake & forged artworks
@@ -22,6 +24,8 @@ For my senior project, I created a tool that abstracts the Ethereum blockchain &
 
 <center><img src="https://wp-assets.futurism.com/2019/04/real-fake-paintings-ai.png" width="400"></center>
 
+
+
 ## Solution: Blockchain
 
 <img style="float: center;" src="https://d1fmx1rbmqrxrr.cloudfront.net/zdnet/optim/i/edit/ne/2019/02/Blockchain%20620__w630.jpg" width="300">
@@ -32,6 +36,8 @@ For my senior project, I created a tool that abstracts the Ethereum blockchain &
 - Permits anonymity of collectors 
 - Allows verification of diversity of mediums (sculpture, multi-media, performances...)
 - Efficient, easy & accurate verification
+
+
 
 ## Workflow & Example Use Case
 
@@ -68,6 +74,8 @@ Alice verifies that this is the authentic artwork. Bob and Alice exchange funds 
   - View minted artwork on explore page
   - Displays relevant & anonymized metadata on artwork detail page (artist, year, current owner's address)
 
+
+
 ## Technicalities
 
 ### Built with
@@ -87,14 +95,20 @@ Alice verifies that this is the authentic artwork. Bob and Alice exchange funds 
 
 ### Backend/Blockchain
 
-The contract used by the dApp is deployed on the Rinkeby testnet. 
+The contract used by the dApp is deployed on the Rinkeby testnet. To see the deployed contract and relevant history on Rinkeby:
 
-When signed into the Metamask account on Rinkeby testnet, the contract should automatically be called and used. There is no need for additional deployment. If interested in my contract code, take a look at the folder /contracts.
+https://rinkeby.etherscan.io/address/0xA62870E463383a0972270C3d99921d8ba433dc48
 
-#### Frontend
+When signed into the Metamask account on Rinkeby testnet, the contract should automatically be called and loaded. There is no need for additional local deployment.
+
+If interested in my contract code, examine contract code at cs191/contracts/Artwork.sol.
+
+### Frontend
 
 ```
-### cd cs191/dapp
+### cd cs191
+### yarn install
+### cd dapp
 ### yarn dev
 ```
 
@@ -104,15 +118,15 @@ When signed into the Metamask account on Rinkeby testnet, the contract should au
 
 There is a lot of features waiting to be built, here is a general roadmap.
 
-#### Roadmap
+### Roadmap
 
-##### Frontend
+#### Frontend
 
-- [ ] Add feedback response (i.e. Minting, Success, Fail)
 - [ ] Add ability to select artwork from /explore to update provenance
 - [ ] Add more edge case detection for security purposes
 - [ ] Provide escrow service
 
-##### Backend
+#### Backend
 
 - [ ] Detect and nudge users to be on the intended network (testnet or mainnet)
+- [ ] Deploy on mainnet for real usage (?)

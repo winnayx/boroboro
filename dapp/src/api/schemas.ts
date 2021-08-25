@@ -36,6 +36,12 @@ export type ArtworkCardProps = {
   metadata: MetadataSchema;
 };
 
+export type ArtworkPageProps = {
+  query: {
+    tokenId: string;
+  };
+};
+
 export const constructMetadata = (
   artwork: any,
   fullPath: string

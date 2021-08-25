@@ -28,7 +28,7 @@ export const uploadFileToIPFS = async (
 
   const buffer = await new Promise<string | ArrayBuffer>((resolve) => {
     reader.onloadend = async () => {
-      resolve(reader.result);
+      resolve(reader.result as string);
     };
   });
 

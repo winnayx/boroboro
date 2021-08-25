@@ -61,10 +61,8 @@ const useStyles = makeStyles({
   },
 });
 
-const validateForm = (
-  artwork: ArtworkSchema
-): { error: boolean; errorState: ArtworkErrorSchema } => {
-  let errorState = {};
+const validateForm = (artwork: any): { error: boolean; errorState: any } => {
+  let errorState = {} as any;
   let error = false;
   Object.keys(artwork).forEach((field) => {
     if (

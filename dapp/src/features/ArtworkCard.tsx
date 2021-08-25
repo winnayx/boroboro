@@ -11,14 +11,6 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { ArtworkCardProps } from "../api/schemas";
-// import { ArtworkMedia } from "./ArtworkMedia";
-import Link from "next/link";
-
-const StyledButton = withStyles({
-  root: {
-    width: "100%",
-  },
-})(Button);
 
 const useStyles = makeStyles({
   root: {

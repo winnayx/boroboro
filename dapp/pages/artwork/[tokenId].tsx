@@ -1,12 +1,13 @@
-import { getToken, getOwner } from "../../src/api/web3";
-import { useEffect, useState } from "react";
-import { MetadataSchema } from "../../src/api/schemas";
-import ContentWrapper from "../../src/features/contentWrapper";
-import { Button, Box, Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles } from "@material-ui/core/styles";
+import { getToken, getOwner } from "../../src/api/web3";
+import { useEffect, useState } from "react";
+import { MetadataSchema, ArtworkPageProps } from "../../src/api/schemas";
+import ContentWrapper from "../../src/features/contentWrapper";
+import Image from "next/image";
 
 const initialMetadata = {
   title: "",
@@ -21,17 +22,17 @@ const useStyles = makeStyles({
   },
 });
 
-function ArtworkPage({ query: { tokenId } }) {
+export default function ArtworkPage({ query: { tokenId } }: ArtworkPageProps) {
   const classes = useStyles();
   const [metadata, setMetadata] = useState<MetadataSchema>(initialMetadata);
   const [owner, setOwner] = useState("");
 
   useEffect(() => {
-    getToken(tokenId).then((metadata) => setMetadata(metadata));
+    getToken(parseInt(tokenId)).then((metadata) => setMetadata(metadata));
   }, [tokenId]);
 
   useEffect(() => {
-    getOwner(tokenId).then((owner) => setOwner(owner));
+    getOwner(parseInt(tokenId)).then((owner) => setOwner(owner));
   }, [tokenId]);
 
   return (
@@ -64,8 +65,6 @@ function ArtworkPage({ query: { tokenId } }) {
   );
 }
 
-ArtworkPage.getInitialProps = async ({ query }) => {
+ArtworkPage.getInitialProps = async ({ query }: ArtworkPageProps) => {
   return { query };
 };
-
-export default ArtworkPage;
