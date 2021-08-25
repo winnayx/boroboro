@@ -105,10 +105,19 @@ If interested in my contract code, examine contract code at cs191/contracts/Artw
 
 ### Frontend
 
+##### Deployed
+
+The dApp is built on top of Next.js and deployed using the native Vercel service. 
+
+It can be accessed at https://boroboro.vercel.app/. 
+
+##### Local
+
+To launch the dApp locally, run
+
 ```
-### cd cs191
+### cd cs191/dapp
 ### yarn install
-### cd dapp
 ### yarn dev
 ```
 
